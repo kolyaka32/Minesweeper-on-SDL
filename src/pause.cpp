@@ -2,6 +2,10 @@
 #include "define.hpp"
 #include "pause.hpp"
 
+// 
+static bool disableUpdate;  // Flag of disabling updating timer
+static count saveTime;      // Value of time, saved for 
+
 // Types of selected box
 enum{  
     NORMAL_BOX,
@@ -61,6 +65,7 @@ void setAllText(){
     
     // Buttons
     esc = new GUI::Button(0.97, 0.03, IMG_MENU_PAUSE);
+    disableUpdate = false;
 }
 
 void updateTranslation(LNG_types language){
@@ -81,14 +86,20 @@ void updateTranslation(LNG_types language){
         texts[i]->updateText(language);
     }
     
-    // Updating dinamic texts
     texts[TXT_MINE_REST]->updateText(language, mineCount - flagedMines);
-    // Updating timer value, depend, if not equal 0 - rest time
-    if(leftTimer){
-        texts[TXT_TIME]->updateText(language, leftTimer - (SDL_GetTicks64() - screenTimer) / 1000);
+    // Updating dinamic texts
+    if(!disableUpdate){
+        
+        // Updating timer value, depend, if not equal 0 - rest time
+        if(leftTimer){
+            texts[TXT_TIME]->updateText(language, leftTimer - (SDL_GetTicks64() - screenTimer) / 1000);
+        }
+        else{
+            texts[TXT_TIME]->updateText(language, (SDL_GetTicks64() - screenTimer) / 1000);
+        }
     }
     else{
-        texts[TXT_TIME]->updateText(language, (SDL_GetTicks64() - screenTimer) / 1000);
+        texts[TXT_TIME]->updateText(language, saveTime);
     }
 }
 
@@ -252,7 +263,18 @@ void pause(){
 
     // Resetting timer to save rest time
     screenTimer += (SDL_GetTicks64() - saveTimer);
-    //screenTimer = SDL_GetTicks64();
+    // Updating timer value, depend, if not equal 0 - rest time
+    if(!disableUpdate){
+        if(leftTimer){
+            texts[TXT_TIME]->updateText(language, leftTimer - (SDL_GetTicks64() - screenTimer) / 1000);
+        }
+        else{
+            texts[TXT_TIME]->updateText(language, (SDL_GetTicks64() - screenTimer) / 1000);
+        }
+    }
+    else{
+        texts[TXT_TIME]->updateText(language, saveTime);
+    }
 };
 
 void endMenu(){
@@ -261,6 +283,15 @@ void endMenu(){
 
     // Stopping palying music, while waiting for restart
     Mix_PauseMusic();
+
+    // Disabling update, while waiting for start
+    disableUpdate = true;
+    if(leftTimer){
+        saveTime = leftTimer - (SDL_GetTicks64() - screenTimer) / 1000;
+    }
+    else{
+        saveTime = (SDL_GetTicks64() - screenTimer) / 1000;
+    }
 
     // Starting loop for waiting for start
     bool waiting = true;
@@ -279,7 +310,7 @@ void endMenu(){
                 switch (event.key.keysym.sym)
                 {
                 case SDLK_ESCAPE:
-                    pause();  
+                    pause();
                     break;
                 
                 default:
@@ -333,8 +364,10 @@ void endMenu(){
 
 void startMenu(){
     // Updating score
+    saveTime = 0;
     texts[TXT_MINE_REST]->updateText(language, 0);
-    texts[TXT_TIME]->updateText(language, 0);
+    texts[TXT_TIME]->updateText(language, saveTime);
+    disableUpdate = true;
 
     // Starting loop for waiting for start
     bool waiting = true;
@@ -351,7 +384,7 @@ void startMenu(){
             case SDL_KEYDOWN:
                 // Going to pause menu by escape button
                 if(event.key.keysym.sym == SDLK_ESCAPE){
-                    pause();  
+                    pause();
                 }
                 break;
             
@@ -405,6 +438,8 @@ void startMenu(){
 
     flagedMines = 0;
     realOpenMines = 0;
+
+    disableUpdate = false;
 
     // Starting playing main game theme
     Mix_PlayMusic( Musics[MUS_MAIN_THEME], -1 );

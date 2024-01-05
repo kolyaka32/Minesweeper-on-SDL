@@ -2,7 +2,7 @@
 
 This repository contains sources for standart game "minesweeper" I made based on SDL2 library.
 
-![Screenshoot of game](/screenshoots/game.png?raw=true)
+![Screenshoot of game](/screenshoots/game-1.png?raw=true)
 
 ## Installing
 

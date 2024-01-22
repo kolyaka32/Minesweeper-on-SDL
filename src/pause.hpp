@@ -40,7 +40,7 @@ enum TXT_types{
 
 // Declaring static text
 #if TXT_count
-extern GUI::staticText* texts[TXT_count];
+extern GUI::staticText texts[TXT_count];
 #endif
 
 // Declaring global list of animations

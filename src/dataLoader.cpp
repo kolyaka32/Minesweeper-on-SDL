@@ -17,9 +17,9 @@ typedef Uint8 counter;  // Type of data for count number of loaded objects
 static zip_t* archive;  // Archive with all data
 
 // Function of open archive and setting base password
-static inline zip_t* openarchive(std::string archiveName){
+static inline zip_t* openarchive(){
     // Open archive with need name
-    archive = zip_open(archiveName.std::string::c_str(), ZIP_RDONLY, NULL);
+    archive = zip_open(DATA_FILE, ZIP_RDONLY, NULL);
 
     #if PASSWORD
     zip_set_default_password(archive, PASSWORD);
@@ -343,10 +343,10 @@ static unsigned loadAllSounds(){
 #endif
 
 // Main data loading function
-void loadData(std::string fileName){
+void loadData(){
     // Opening archive
     #if ARCHIEVE_LOADING
-    if(openarchive(fileName) == NULL){
+    if(openarchive() == NULL){
         printf("Can't load arcieve");
         exit(ERR_FIL_OPN);
     } 

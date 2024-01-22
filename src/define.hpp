@@ -14,6 +14,9 @@
 #define HEADLINE 128                            // Upper line for text
 #define SCREEN_WIDTH (GAME_WIDTH)               // Width of all screen
 #define SCREEN_HEIGHT (GAME_HEIGHT + HEADLINE)  // Height of all screen
+// Base file names
+#define SETTING_FILE "settings2.ini"            // File with all starting data (width, height...)
+#define DATA_FILE "data2.dat"                   // File with all pictures, music...
 
 // Base game colors
 #define BLACK {0, 0, 0, 255}

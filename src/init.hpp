@@ -13,6 +13,10 @@ void deleteVideo();
 // Function of closing all outside libraries and files
 void exitLibraries();
 
+// Work codes
+// Normal work
+#define NOR_NOR 0x00000  // Normal work of program without any problems
+
 // Errors codes
 // Error codes of libraries
 #define ERR_SDL_OTH 0x00010  // error with other sdl library
@@ -20,6 +24,7 @@ void exitLibraries();
 #define ERR_SDL_IMG 0x00012  // error with image sdl library
 #define ERR_SDL_SND 0x00013  // error with sound sdl library
 #define ERR_SDL_FFT 0x00014  // error with font sdl library
+#define ERR_ZIP_LIB 0x00016  // error with ziplib library
 
 // Global initialisations
 #define ERR_INI_OTH 0x00020  // error with other initialisation

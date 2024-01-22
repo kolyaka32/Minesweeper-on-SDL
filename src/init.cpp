@@ -52,6 +52,7 @@ void createVideo(){
         printf("Couldn't create renderer.\n");
         exit(ERR_INI_REN);
     }
+    // Setting base drawing color
     SDL_SetRenderDrawColor(app.renderer, BACKGROUND_COLOR);
 
     // Openning audio chanel

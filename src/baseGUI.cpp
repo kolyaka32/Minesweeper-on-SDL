@@ -6,79 +6,79 @@
 #include "baseGUI.hpp"
 #include "pause.hpp"
 
+#define BUFFER_LENGTH 100
+
 using namespace GUI;
 
 // Function of creating font with need height
-TTF_Font* createFont(Uint8 size){
+inline TTF_Font* createFont(Uint8 size){
     SDL_RWops* fontData = SDL_RWFromMem(fontMemory, fontSize);
     return TTF_OpenFontRW(fontData, 1, size);
 };
 
 
 // Class of static text
-staticText::staticText(char* newText, const Uint8 size, const float x, const float y, const ALIGNMENT_types newAligment, const SDL_Color newColor){
-    Font = createFont(size);
+staticText::staticText(char* newText, Uint8 size, float x, float y, ALIGNMENT_types newAligment, SDL_Color newColor){
+    fontHeight = size;
     text = newText;
     posX = x;
-    Rect.y = SCREEN_HEIGHT * y;
+    posY = y;
     aligment = newAligment;
     color = newColor;
 };
 
-void staticText::updateText(LNG_types language){
-    Uint16 i = 0;
-    for(Uint8 end = 0; (end != language); ++i){
-        if(text[i] == '\0'){
-            end++;
-        }
+inline void writeNumber(char* buffer, int number, Uint8* pos){
+    if(number < 0){
+        buffer[*pos++] = '-';
+        number = -number;
     }
-    
-    SDL_Surface* Surface = TTF_RenderUTF8_Solid(Font, text + i, color);
-    Texture = SDL_CreateTextureFromSurface(app.renderer, Surface);
-    SDL_FreeSurface(Surface);
-    SDL_QueryTexture(Texture, NULL, NULL, &Rect.w, &Rect.h);
-    Rect.x = (SCREEN_WIDTH) * posX - (Rect.w * aligment / 2); 
-};
+    Uint8 end = 0;
+    int num = number;
+    do{
+        num /= 10;
+        end++;
+    } while(num);
+    *pos += end;
+    do {   
+        buffer[--*pos] = '0' + number % 10;
+        number /= 10;
+    } while (number);
+    *pos += end;
+}
+
+void staticText::init(){
+    Font = createFont(fontHeight);
+}
 
 void staticText::updateText(LNG_types language, int number){
-    char title[100];
+    char buffer[BUFFER_LENGTH];
     Uint8 start = 0;
-    for(Uint8 end = 0; (end != language); ++start){
-        if(text[start] == '\0'){
+    for(Uint8 end = 0; (end != language) && (start < BUFFER_LENGTH); ++start){
+        if(text[start] == '\n'){
             end++;
         }
     }
     Uint8 d = 0;
-    for(int i=start; text[i]; ++i ){
-        if(text[i] == '%'){
-            if(number < 0){
-                title[d++] = '-';
-                number = -number;
-            }
-            Uint8 end = 0;
-            int num = number;
-            do{
-                num/=10;
-                end++;
-            } while(num);
-            d += end;
-            do {   
-                title[--d] = '0' + number % 10;
-                number /= 10;
-            } while (number);
-            d += end;
-        }
-        else{
-            title[d++] = text[i];
+    for(int i = start; text[i] && (text[i] != '\n') && (start < BUFFER_LENGTH); ++i ){
+        switch (text[i])
+        {
+        case '%':
+            writeNumber(buffer, number, &d);
+            break;
+        
+        default:
+            buffer[d++] = text[i];
+            break;
         }
     }
-    title[d] = '\0';
+    buffer[d] = '\0';
     
-    SDL_Surface* Surface = TTF_RenderUTF8_Solid(Font, title, color);
+    SDL_Surface* Surface = TTF_RenderUTF8_Solid(Font, buffer, color);
     Texture = SDL_CreateTextureFromSurface(app.renderer, Surface);
     SDL_FreeSurface(Surface);
     SDL_QueryTexture(Texture, NULL, NULL, &Rect.w, &Rect.h);
     Rect.x = (SCREEN_WIDTH) * posX - (Rect.w * aligment / 2); 
+    Rect.y = SCREEN_HEIGHT * posY;
 };
 
 void staticText::blit(){
@@ -188,6 +188,7 @@ void Bar::blit( int width ){
     SDL_RenderCopy(app.renderer, IconeTexture, NULL, &IconeRect);  // Rendering icone
 };
 
+/*
 // Dropbox class
 DropBox::DropBox(SDL_Rect place, Uint8 newCount, char* newText, Uint8 size, SDL_Color newFrontColor, SDL_Color newBackColor){
     closeDest = place;
@@ -249,3 +250,4 @@ void DropBox::blit(){
         SDL_RenderDrawRect(app.renderer, &closeDest);
     }
 }
+//*/

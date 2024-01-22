@@ -5,7 +5,7 @@
 #include "structs.hpp"
 
 // Load file with all data
-void loadData(std::string fileName);
+void loadData();
 
 // Function of clearing all temporary data, loaded from arcieve
 void unloadData();

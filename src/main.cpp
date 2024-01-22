@@ -65,15 +65,6 @@ Uint8* fontMemory;    // Memory with font data
 uint64_t fontSize;    // Size of memory buffer
 #endif
 
-// Global HUD
-#if TXT_count
-GUI::staticText* texts[TXT_count];  // Global static texts
-#endif
-#if ANI_count
-HUD::Animation Animations[ANI_count];  // Global animations list
-#endif
-GUI::Button* esc;
-
 // Main function
 int main(int argv, char** args){
     initLibraries();  // Initialasing all need libraries
@@ -81,7 +72,7 @@ int main(int argv, char** args){
     createVideo();    // Creating video output system
     
     // Loading data from file
-    loadData("data.dat");
+    loadData();
 
     #if MUS_count
     // Setting volumes of sounds
@@ -199,10 +190,10 @@ int main(int argv, char** args){
         // Checking, if drawing need
         if(SDL_GetTicks64() - oldDrawTime > 1000 / drawFPS){
             // Updating signes
-            texts[TXT_MINE_REST]->updateText(language, mineCount - flagedMines);
+            texts[TXT_MINE_REST].updateText(language, mineCount - flagedMines);
             // Updating timer value, depend, if not equal 0 - rest time
             if(leftTimer){
-                texts[TXT_TIME]->updateText(language, leftTimer - (SDL_GetTicks64() - screenTimer) / 1000);
+                texts[TXT_TIME].updateText(language, leftTimer - (SDL_GetTicks64() - screenTimer) / 1000);
 
                 // Checking, if timer end - loosing game
                 if((SDL_GetTicks64() - screenTimer) / 1000 >= leftTimer){
@@ -211,7 +202,7 @@ int main(int argv, char** args){
                 }
             }
             else{
-                texts[TXT_TIME]->updateText(language, (SDL_GetTicks64() - screenTimer) / 1000);
+                texts[TXT_TIME].updateText(language, (SDL_GetTicks64() - screenTimer) / 1000);
             }
 
             // Clearing screen
@@ -222,8 +213,8 @@ int main(int argv, char** args){
 
             // Drawing interface
             esc->blit();
-            texts[TXT_MINE_REST]->blit();
-            texts[TXT_TIME]->blit();
+            texts[TXT_MINE_REST].blit();
+            texts[TXT_TIME].blit();
 
             // Blitting textures on screen
             SDL_RenderPresent(app.renderer);
@@ -237,7 +228,11 @@ int main(int argv, char** args){
         }
 	}
     // Exiting program
-    saveInitFile();  // Saving all data to setting file for next starts
+    // Stopping playing music
+    Mix_PauseMusic();
+
+    // Saving all data to setting file for next starts
+    saveInitFile();  
 
     // Clearing static texts
     #if TXT_count

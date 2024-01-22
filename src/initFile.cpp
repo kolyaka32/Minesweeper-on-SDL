@@ -9,7 +9,7 @@
 // Loading initialasing settings in game
 void loadInitFile(){
     // Reading file
-    std::ifstream in("settings.ini"); // Open file to read
+    std::ifstream in(SETTING_FILE); // Open file to read
     std::string line;  // Output string line
 
     // Setting standart values for variables
@@ -22,7 +22,8 @@ void loadInitFile(){
     mineCount = 40;
     leftTimer = 0;
 
-    while(std::getline(in, line)){  // Reading file until it end
+    // Reading file until it end
+    while(std::getline(in, line)){  
         std::string first = line.substr(0, line.find('=')-1);
         // Switching between options
         if( first == "language" ){
@@ -74,7 +75,7 @@ void loadInitFile(){
 
 // Saving initialasing file
 void saveInitFile(){
-    std::ofstream setting("settings.ini");  // Creating output file
+    std::ofstream setting(SETTING_FILE);  // Creating output file
 
     // Writing data to output
     setting << "# Language type (english/russian):" << std::endl;  // Extra comment

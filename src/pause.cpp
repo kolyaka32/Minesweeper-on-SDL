@@ -2,7 +2,7 @@
 #include "define.hpp"
 #include "pause.hpp"
 
-// 
+// Internal flags of working (for better timer and counter work)
 static bool disableUpdate;  // Flag of disabling updating timer
 static count saveTime;      // Value of time, saved for 
 
@@ -17,51 +17,43 @@ enum{
 } SELCTED_BOX_types;
 
 
+// Global HUD
+#if TXT_count
+// Global static texts
+GUI::staticText texts[TXT_count] = {
+    {"Press on field to start\nНажмите на поле для старта\n", 
+        24, 0.5, 0.08},
+    {"Rest: %\nОсталось: %\n", 
+        24, 0.02, 0.02, GUI::LEFT_text},
+    {"Time: %\nВремя: %\n", 
+        24, 0.9, 0.02, GUI::RIGHT_text},
+    {"You win!\nВы выиграли!\n", 
+        24, 0.5, 0.06},
+    {"You loose...\nВы проиграли...\n", 
+        24, 0.5, 0.06},
+    {"You stop game.\nВы остановили игру.\n", 
+        24, 0.5, 0.06},
+    {"Press any button.\nНажмите на любую кнопку.\n", 
+        24, 0.5, 0.11},
+    {"Game on pause\nИгра на паузе\n", 
+        30, 0.5, 0.05, GUI::MIDLE_text, GREY},
+    {"Music:\nМузыка:\n", 
+        24, 0.5, 0.4, GUI::MIDLE_text, GREY},
+    {"Sounds:\nЗвуки:\n", 
+        24, 0.5, 0.55, GUI::MIDLE_text, GREY},
+};
+#endif
+
+#if ANI_count
+HUD::Animation Animations[ANI_count];  // Global animations list
+#endif
+GUI::Button* esc;
+
+
 void setAllText(){
-    // Main game texts
-    texts[TXT_START_KEYS] = new GUI::staticText(
-        "Press on field to start\0"
-        "Нажмите на поле для старта\0"
-        , 24, 0.5, 0.08);
-    
-    texts[TXT_MINE_REST] = new GUI::staticText(
-        "Rest: %\0"
-        "Осталось: %\0"
-        , 24, 0.02, 0.02, GUI::LEFT_text);
-    texts[TXT_TIME] = new GUI::staticText(
-        "Time: %\0"
-        "Время: %\0"
-        , 24, 0.9, 0.02, GUI::RIGHT_text);
-    
-    texts[TXT_END_WIN] = new GUI::staticText(
-        "You win!\0"
-        "Вы выиграли!\0"
-        , 24, 0.5, 0.06);
-    texts[TXT_END_LOOSE] = new GUI::staticText(
-        "You loose...\0"
-        "Вы проиграли...\0"
-        , 24, 0.5, 0.06);
-    texts[TXT_END_SKIP] = new GUI::staticText(
-        "You stop game.\0"
-        "Вы остановили игру.\0"
-        , 24, 0.5, 0.06);
-    texts[TXT_END_KEYS] = new GUI::staticText(
-        "Press any button.\0"
-        "Нажмите на любую кнопку.\0"
-        , 24, 0.5, 0.11);
-    
-    texts[TXT_PAUSE_PAUSE] = new GUI::staticText(
-        "Game on pause\0"
-        "Игра на паузе\0"
-        , 30, 0.5, 0.05, GUI::MIDLE_text, GREY);
-    texts[TXT_PAUSE_MUSIC] = new GUI::staticText(
-        "Music:\0"
-        "Музыка:\0"
-        , 24, 0.5, 0.4, GUI::MIDLE_text, GREY);
-    texts[TXT_PAUSE_SOUND] = new GUI::staticText(
-        "Sounds:\0"
-        "Звуки:\0"
-        , 24, 0.5, 0.55, GUI::MIDLE_text, GREY);
+    for(Uint8 i=0; i < TXT_count; ++i){
+        texts[i].init();
+    }
     
     // Buttons
     esc = new GUI::Button(0.97, 0.03, IMG_MENU_PAUSE);
@@ -83,30 +75,30 @@ void updateTranslation(LNG_types language){
     
     // Updating texts
     for(int i=0; i<TXT_count;++i){
-        texts[i]->updateText(language);
+        texts[i].updateText(language);
     }
     
-    texts[TXT_MINE_REST]->updateText(language, mineCount - flagedMines);
+    texts[TXT_MINE_REST].updateText(language, mineCount - flagedMines);
     // Updating dinamic texts
     if(!disableUpdate){
         
         // Updating timer value, depend, if not equal 0 - rest time
         if(leftTimer){
-            texts[TXT_TIME]->updateText(language, leftTimer - (SDL_GetTicks64() - screenTimer) / 1000);
+            texts[TXT_TIME].updateText(language, leftTimer - (SDL_GetTicks64() - screenTimer) / 1000);
         }
         else{
-            texts[TXT_TIME]->updateText(language, (SDL_GetTicks64() - screenTimer) / 1000);
+            texts[TXT_TIME].updateText(language, (SDL_GetTicks64() - screenTimer) / 1000);
         }
     }
     else{
-        texts[TXT_TIME]->updateText(language, saveTime);
+        texts[TXT_TIME].updateText(language, saveTime);
     }
 }
 
 void clearAllText(){
-    for(int i=0; i<TXT_count;++i){
+    /*for(int i=0; i<TXT_count;++i){
         delete texts[i];
-    }
+    }*/
     delete esc;
 }
 
@@ -124,7 +116,7 @@ void pause(){
     "123\n456\n789\n101\n",
     20);*/
 
-    //sizeDropBox->updateText(language);
+    //sizeDropBox.updateText(language);
 
     SDL_Event event;
     bool waiting = true;
@@ -240,9 +232,9 @@ void pause(){
         backMove %= (MINE_SIDE * 2);
          
         // Showing extra text
-        texts[TXT_PAUSE_PAUSE]->blit();
-        texts[TXT_PAUSE_MUSIC]->blit();
-        texts[TXT_PAUSE_SOUND]->blit();
+        texts[TXT_PAUSE_PAUSE].blit();
+        texts[TXT_PAUSE_MUSIC].blit();
+        texts[TXT_PAUSE_SOUND].blit();
         // Drawing sliders
         MusicSlider.blit(MusicVolume * 2);
         SoundSlider.blit(EffectsVolume * 2);
@@ -266,14 +258,14 @@ void pause(){
     // Updating timer value, depend, if not equal 0 - rest time
     if(!disableUpdate){
         if(leftTimer){
-            texts[TXT_TIME]->updateText(language, leftTimer - (SDL_GetTicks64() - screenTimer) / 1000);
+            texts[TXT_TIME].updateText(language, leftTimer - (SDL_GetTicks64() - screenTimer) / 1000);
         }
         else{
-            texts[TXT_TIME]->updateText(language, (SDL_GetTicks64() - screenTimer) / 1000);
+            texts[TXT_TIME].updateText(language, (SDL_GetTicks64() - screenTimer) / 1000);
         }
     }
     else{
-        texts[TXT_TIME]->updateText(language, saveTime);
+        texts[TXT_TIME].updateText(language, saveTime);
     }
 };
 
@@ -335,19 +327,19 @@ void endMenu(){
         field->blit();
 
         // Drawing signs
-        texts[TXT_MINE_REST]->blit();
-        texts[TXT_TIME]->blit();
+        texts[TXT_MINE_REST].blit();
+        texts[TXT_TIME].blit();
 
         if(loosing){
-            texts[TXT_END_LOOSE]->blit();
+            texts[TXT_END_LOOSE].blit();
         }
         else if(winning){
-            texts[TXT_END_WIN]->blit();
+            texts[TXT_END_WIN].blit();
         }
         else if(skipping){
-            texts[TXT_END_SKIP]->blit();
+            texts[TXT_END_SKIP].blit();
         }
-        texts[TXT_END_KEYS]->blit();
+        texts[TXT_END_KEYS].blit();
 
         esc->blit();
 
@@ -365,8 +357,8 @@ void endMenu(){
 void startMenu(){
     // Updating score
     saveTime = 0;
-    texts[TXT_MINE_REST]->updateText(language, 0);
-    texts[TXT_TIME]->updateText(language, saveTime);
+    texts[TXT_MINE_REST].updateText(language, 0);
+    texts[TXT_TIME].updateText(language, saveTime);
     disableUpdate = true;
 
     // Starting loop for waiting for start
@@ -409,10 +401,10 @@ void startMenu(){
 
         field->blit();
         // Drawing signes after bacground
-        texts[TXT_START_KEYS]->blit();
+        texts[TXT_START_KEYS].blit();
 
-        texts[TXT_MINE_REST]->blit();
-        texts[TXT_TIME]->blit();
+        texts[TXT_MINE_REST].blit();
+        texts[TXT_TIME].blit();
 
         esc->blit();
         #if ADEVERTISMENT

@@ -17,20 +17,21 @@ namespace GUI{
     class staticText
     {
     private:
+        Uint8 fontHeight;
         TTF_Font* Font;
-        //SDL_Surface *Surface;
-        SDL_Texture *Texture;
-        SDL_Rect Rect;
         char *text;
-        float posX;
+        float posX, posY;
         ALIGNMENT_types aligment;
         SDL_Color color;
+
+        SDL_Texture *Texture;
+        SDL_Rect Rect;
     public:
-        staticText(char* newText, const Uint8 newSize, const float newX, const float newY, const ALIGNMENT_types newAlignment = MIDLE_text, const SDL_Color newColor = WHITE);
-        void updateText(LNG_types language);
-        void updateText(LNG_types language, int number);
-        void blit();
+        staticText(char* newText, Uint8 newSize, float newX, float newY, ALIGNMENT_types newAlignment = MIDLE_text, SDL_Color newColor = WHITE);
         ~staticText();
+        void init();
+        void updateText(LNG_types language, int number = 0);
+        void blit();
     };
 
     // Class of slider bar with point on it better expirience
@@ -87,6 +88,8 @@ namespace GUI{
         void blit( int width );
     };
 
+
+/*
     // Class of 
     class DropBox
     {
@@ -107,5 +110,5 @@ namespace GUI{
         void updateText(LNG_types language);
         void click(const int mouseX, const int mouseY);
         void blit();
-    };
+    };*/
 }

@@ -67,28 +67,6 @@ uint64_t fontSize;    // Size of memory buffer
 
 // Main function
 int main(int argv, char** args){
-    initLibraries();  // Initialasing all need libraries
-    loadInitFile();   // Load initialasing file file with settings
-    createVideo();    // Creating video output system
-    
-    // Loading data from file
-    loadData();
-
-    #if MUS_count
-    // Setting volumes of sounds
-    Mix_VolumeMusic(MusicVolume);  // Setting volume of music
-    Mix_Volume(-1, EffectsVolume);  // Setting volume of effects
-    // Infinite playing main game theme
-    Mix_PlayMusic( Musics[MUS_MENU_THEME], -1 );  
-    #endif
-
-    // Creating user interface
-    setAllText();  // Setting all text
-    updateTranslation(language);  // Updating text
-
-    // Creating mine field and initialasing it
-    field = new Field;
-
     // Showing enter screen and waiting for start
     startMenu();
 

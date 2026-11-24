@@ -13,14 +13,16 @@
 // Names of sound effects
 enum class Sounds : unsigned {
     // Game part
-    Turn,
-    Reset,
+    Click,
+    FlagSet,
+    Loose,
+    Win,
 
     // Global counter of all loaded sounds
     Count,
 
     // Shortcut for changing slider sound in settings
-    SliderSound = Turn,
+    SliderSound = FlagSet,
 };
 
 // File names of the corresponding sounds

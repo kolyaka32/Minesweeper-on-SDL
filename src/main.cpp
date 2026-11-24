@@ -4,15 +4,13 @@
  */
 
 #include "data/app.hpp"
+#include "game/field.hpp"
 
 
 // Main function
 int main(int argv, char **args) {
     // Creating main window
-    Window window{1200, 900, {"ATMOS", "АТМОС"}};
-
-    // Aero thermal transfer and exchange of mass project tool
-    // Аэро термо масс обмен строй
+    Window window{1200, 900, {"Minesweeper on SDL", "Сапёр на SDL"}};
 
     // Running menu
     App::run(window);

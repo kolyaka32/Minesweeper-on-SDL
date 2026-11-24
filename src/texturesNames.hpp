@@ -16,24 +16,33 @@ enum class Textures : unsigned {
     // Graphic interface sprites
     SliderButton,
     SliderLine,
-    QuitButton,
-    MenuButton,
-    SaveButton,
+    //MenuButton,
     SettingsButton,
 
     // Base flags in settings
     FlagUSA,
     FlagRUS,
-    //FlagGER,
-    //FlagBEL,
 
-    // Main game part
-    Wall,
-    Vent,
-    Heater,
-    Buldozer,
-    Valve,
-    Cooler,
+    // Mines on field icones
+    MineClose,
+    MineNormal,
+    MineGreen,
+    MineRed,
+
+    // Flags on field icones
+    FlagRight,
+    FlagWrong,
+
+    // Open mines icones on field
+    Mine0,
+    Mine1,
+    Mine2,
+    Mine3,
+    Mine4,
+    Mine5,
+    Mine6,
+    Mine7,
+    Mine8,
 
     // Global counter of all textures
     Count,

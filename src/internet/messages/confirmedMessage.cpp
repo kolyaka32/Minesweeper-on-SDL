@@ -1,0 +1,37 @@
+/*
+ * Copyright (C) 2026, Kazankov Nikolay
+ * <nik.kazankov.05@mail.ru>
+ */
+
+#include "confirmedMessage.hpp"
+
+#if (USE_NET)
+
+
+Uint8 ConfirmedMessage::globalMessageIndex = 1;
+
+void ConfirmedMessage::updateGlobalIndex() {
+    // Upating global message index, skipping 0
+    if (globalMessageIndex == maxSendId) {
+        globalMessageIndex = 1;
+    } else {
+        globalMessageIndex++;
+    }
+}
+
+bool ConfirmedMessage::isNeedResend() {
+    // Check, if get over timer
+    if (getTime() > nextResend) {
+        // Resending this message
+        nextResend = getTime() + messageResendTimeout;
+        logger.additional("Resending packet with code: %u, index: %u", getData()[0], messageIndex);
+        return true;
+    }
+    return false;
+}
+
+bool ConfirmedMessage::applyMessage(Uint8 _index) const {
+    return messageIndex == _index;
+}
+
+#endif  // (USE_NET)

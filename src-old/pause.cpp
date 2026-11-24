@@ -44,9 +44,7 @@ GUI::staticText texts[TXT_count] = {
 };
 #endif
 
-#if ANI_count
-HUD::Animation Animations[ANI_count];  // Global animations list
-#endif
+
 GUI::Button* esc;
 
 

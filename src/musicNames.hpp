@@ -12,7 +12,7 @@
 
 // Names of music tracks
 enum class Music {
-    // Menu part
+    Main,
     Menu,
 
     // Global counter of all loaded sounds

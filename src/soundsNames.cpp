@@ -10,9 +10,10 @@
 
 // File names of the corresponding sounds
 const char* soundsFilesNames[unsigned(Sounds::Count)] = {
-    // Game part
-    "snd/turn.wav",
-    "snd/reset.wav",
+    "snd/click.wav",
+    "snd/flagSet.wav",
+    "snd/loose.wav",
+    "snd/win.wav",
 };
 
 #endif  // (PRELOAD_SOUNDS)

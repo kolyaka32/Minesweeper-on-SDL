@@ -14,7 +14,3 @@
 #define CHECK_ALL DEBUG
 // Flag to load data from archieve (true) or straight from files (false)
 #define ARCHIEVE_LOADING !(DEBUG)
-
-// Internet testing
-// Testing connection stability
-#define CONNECTION_LOST_PERCENT 0

@@ -1,10 +1,5 @@
 #pragma once
 
-// Extra modifications for game
-#define DEBUG false
-#define ARCHIEVE_LOADING true
-#define SCROLLER_SOUND SND_count
-#define ADEVERTISMENT ANI_count
 
 // System numbers
 #define WINDOWNAME "Minesweeper on SDL"         // System game name
@@ -18,24 +13,15 @@
 #define SETTING_FILE "settings2.ini"            // File with all starting data (width, height...)
 #define DATA_FILE "data2.dat"                   // File with all pictures, music...
 
-// Base game colors
-#define BLACK {0, 0, 0, 255}
-#define WHITE {255, 255, 255, 255}
-#define GREY {32, 32, 32, 255}
-#define BACKGROUND_COLOR 0, 0, 0, 255
+
 
 // Types of data
-typedef uint8_t coord;      // Type of data for coordinates
+
 typedef uint16_t count;     // Type of data for mines counters
 typedef uint8_t mineState;  // Type of data for saving mine state (from MINE_STATES)
 
-// Types of language
-enum LNG_types{
-    LNG_ENGLISH,  // English language
-    LNG_RUSSIAN   // Russian language
-};
 
-#define LNG_count 2  // Final counter of all languages
+
 
 // Array of positions, near procedral cell
 const Sint8 aroundPos[]{
@@ -49,21 +35,7 @@ const Sint8 aroundPos[]{
     -1, 1
 };
 
-// Types of mines 
-enum MINE_STATES{
-    MINE_NORMAL_0 = 0,
-    MINE_NORMAL_8 = 8,
-    MINE_MINE = 9,
 
-    MINE_OPEN_NORMAL_0 = 10,
-    MINE_OPEN_NORMAL_8 = 18,
-
-    MINE_EXPLODED = 19,
-
-    MINE_FLAG_WRONG_0 = 20,
-    MINE_FLAG_WRONG_8 = 28,
-    MINE_FLAG_CORRECT = 29
-};
 
 // Types of setting flag (on RCLICK)
 enum FLAG_SETTING{
@@ -71,7 +43,3 @@ enum FLAG_SETTING{
     FLAG_SET,
     FLAG_RESET
 };
-
-// Macroses
-#define MAX(a, b) (a > b ? a : b)
-#define MIN(a, b) (a < b ? a : b)

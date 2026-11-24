@@ -16,7 +16,7 @@
 #define USE_NET              false   // Any of libraries for use with internet connection
 #define USE_LIBZIP           true    // Library for compress data to zip archives
 // Use setting file for store data between seccions  
-#define USE_SETTING_FILE     false
+#define USE_SETTING_FILE     true
 // Preloaded GFX (could be created runtime)
 #define PRELOAD_TEXTURES     true    // Preload textures
 #define PRELOAD_ANIMATIONS   false   // Preload GIF animaions
@@ -25,24 +25,20 @@
 #define PRELOAD_MUSIC        true    // Preload music
 // Use archive for store additional GFX
 #define PRELOAD_DATA PRELOAD_TEXTURES | PRELOAD_FONTS | PRELOAD_ANIMATIONS | PRELOAD_SOUNDS | PRELOAD_MUSIC
-// Additional flags
-#define CAPTURE_AUIO         false   // Flag of using audio capture device
-#define USE_SERIAL           false   // Flag of using serial port
 
 
 // System game name
-#define WINDOW_NAME "ATMOS"
-#define LOG_NAME "log.txt"
+#define WINDOW_NAME "Minesweeper"
+#define LOG_NAME "log-%d.txt"
 
-// Base file names
 // File with all GFX
 #if (PRELOAD_DATA)
-#define DATA_FILE "data-ATMOS.dat"
+#define DATA_FILE "data-minesweeper.dat"
 #endif
 
 // File with all saved data (language, settings, volumes...)
 #if (USE_SETTING_FILE)
-#define SETTING_FILE "settings-ATMOS.ini"
+#define SETTING_FILE "settings-minesweeper.ini"
 #endif
 
 // Number of active connections in internet part
